@@ -16,15 +16,16 @@ class ROBOT:
         MN2 = sim.send_motor_neuron( joint_id = joint )
 
         #add sensors
-        T0 = sim.send_touch_sensor( body_id = whiteObject )
-        T1 = sim.send_touch_sensor( body_id = redObject )
-        P2 = sim.send_proprioceptive_sensor( joint_id = joint )
-        R3 = sim.send_ray_sensor( body_id = redObject , x = 0, y = 1, z = 1.1 , r1 = 0, r2 = 1, r3 = 0)
+        self.T0 = sim.send_touch_sensor( body_id = whiteObject )
+        self.T1 = sim.send_touch_sensor( body_id = redObject )
+        self.P2 = sim.send_proprioceptive_sensor( joint_id = joint )
+        self.R3 = sim.send_ray_sensor( body_id = redObject , x = 0, y = 1, z = 1.1 , r1 = 0, r2 = 1, r3 = 0)
+        self.P4 = sim.send_position_sensor( body_id = redObject )
 
         #add neurons
-        SN0 = sim.send_sensor_neuron( sensor_id = T0 )
-        SN1 = sim.send_sensor_neuron(sensor_id=T1)
+        self.SN0 = sim.send_sensor_neuron( sensor_id = self.T0 )
+        self.SN1 = sim.send_sensor_neuron(sensor_id=self.T1)
 
         #add synapses
-        sim.send_synapse(source_neuron_id = SN1 , target_neuron_id = MN2 , weight = wt )
-        sim.send_synapse(source_neuron_id = SN0 , target_neuron_id = MN2 , weight = wt )
+        sim.send_synapse(source_neuron_id = self.SN1 , target_neuron_id = MN2 , weight = wt )
+        sim.send_synapse(source_neuron_id = self.SN0 , target_neuron_id = MN2 , weight = wt )
