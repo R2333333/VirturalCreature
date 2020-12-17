@@ -2,13 +2,13 @@ import pyrosim
 from robot import ROBOT
 import random as rd
 import math
-import numpy as np
+from numpy import random
 
 class INDIVIDUAL:
 
     def __init__(self, i):
         self.ID = i
-        self.genome = np.random.random(4) * 2 - 1
+        self.genome = random.random((4,8)) * 2 - 1
         self.fitness = 0
 
     def Start_Evaluation(self, eval_time=1000, play_blind=False):
@@ -23,8 +23,11 @@ class INDIVIDUAL:
         return self.fitness
 
     def mutate(self):
-        num = rd.randint(0,3)
-        self.genome[num] = rd.gauss( self.genome[num] , math.fabs(self.genome[num]) )
+        row = rd.randint(0,len(self.genome) - 1)
+        col = rd.randint(0, len(self.genome[0]) - 1)
+        mutatedVal = rd.gauss(self.genome[row][col] , math.fabs(self.genome[row][col]))
+        self.genome[row][col] = 1 if mutatedVal > 1 else (-1 if mutatedVal < -1 else mutatedVal)
+
 
     def print(self):
         print(f'[%i %8.5f]' % (self.ID, self.fitness), end=' ')
