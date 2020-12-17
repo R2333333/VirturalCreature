@@ -6,7 +6,7 @@ from copy import deepcopy
 
 #create objects
 parent = INDIVIDUAL()
-print(parent.evaluate())
+print(parent.evaluate(play_blind=True))
 
 for i in range(100):
     child = deepcopy(parent)
@@ -15,14 +15,7 @@ for i in range(100):
 
     if ( child.fitness > parent.fitness ):
         parent = child
-        f = open('robot.p','wb')
-        pickle.dump(parent , f )
-        f.close()
-        child.evaluate()
-    
-
-#plot sensor data
-# f = plt.figure()
-# panel = f.add_subplot(111)
-# plt.plot(y)
-# plt.show()
+        # f = open('robot.p','wb')
+        # pickle.dump(parent , f )
+        # f.close()
+        # child.evaluate()
