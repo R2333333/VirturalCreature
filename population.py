@@ -1,14 +1,21 @@
 from individual import INDIVIDUAL
+from copy import deepcopy
+import random as rd
 # import numpy as np
 
 class POPULATION:
 
-    def __init__(self, popSize=5):
-        self.p = [INDIVIDUAL(i) for i in range(popSize)]
+    def __init__(self, popSize=5, initialize=True):
+        # self.popSize = popSize
+        if initialize:
+            self.p = [INDIVIDUAL(i) for i in range(popSize)]
+        else:
+            self.p = []
         
-    def print(self):    
-        [p.print() for p in self.p]
-        print()
+    def print(self, precede=''):
+        if len(self.p) > 0:    
+            [p.print(precede) for p in self.p]
+        print()    
         
     def evaluate(self, play_blind=False, best=False):
         if best:
@@ -28,3 +35,22 @@ class POPULATION:
     def replaceWith(self, other):
         for i in range(len(self.p)):
             self.p[i] = other.p[i] if other.p[i].fitness > self.p[i].fitness else self.p[i]
+
+    def fill_from(self, other):
+        self.copy_best_from(other)
+        self.collect_children_from(other)
+
+    def copy_best_from(self, other):
+        self.p.append(deepcopy(max(other.p, key=lambda i: i.fitness)))
+
+    def collect_children_from(self, other):
+        for i in other.p[1:]:
+            winner = deepcopy(self.winner_of_tournament_selection(other))
+            self.p.append(winner if not winner in self.p else winner.mutate())
+
+    def winner_of_tournament_selection(self, other):
+        p1, p2 = 0, 0
+        while p1 == p2:
+            p1, p2 = [other.p[rd.randint(0, len(other.p) - 1)] for i in [1,2]]
+
+        return max(p1, p2, key=lambda p: p.fitness)
