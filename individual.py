@@ -27,7 +27,10 @@ class INDIVIDUAL:
         col = rd.randint(0, len(self.genome[0]) - 1)
         mutatedVal = rd.gauss(self.genome[row][col] , math.fabs(self.genome[row][col]))
         self.genome[row][col] = 1 if mutatedVal > 1 else (-1 if mutatedVal < -1 else mutatedVal)
+        return self
 
+    def print(self, precede=''):
+        print(f'{precede}[%i %8.5f]' % (self.ID, self.fitness), end=' ')
 
-    def print(self):
-        print(f'[%i %8.5f]' % (self.ID, self.fitness), end=' ')
+    def  __eq__(self, other):
+        return self.fitness == other.fitness
