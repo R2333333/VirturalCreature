@@ -3,3 +3,4 @@ playback.py
 robot.p
 *.bmp
 *.bak
+*.pyc
