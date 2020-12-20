@@ -1,20 +1,18 @@
-from copy import deepcopy
 from environments import ENVIRONMENTS
-from geneticAlgorithm import population as p
+from population import POPULATION
 import constants as C
 
 envs = ENVIRONMENTS()
 
-parents = p.POPULATION(C.popSize)
-parents.evaluate(True)
+parents = POPULATION(C.popSize)
+parents.evaluate(envs, True)
 parents.print('  0')
 
-
 for g in range(C.numGens):
-    children = p.POPULATION(initialize=False)
+    children = POPULATION(C.popSize, initialize=False)
     children.fill_from(parents)
-    children.evaluate(True)
+    children.evaluate(envs, True)
     children.print('%3i' % (g + 1))
     parents = children
 
-parents.evaluate(best=True)
+parents.evaluate(envs, best=True)

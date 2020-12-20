@@ -1,5 +1,5 @@
 import pyrosim
-from geneticAlgorithm import robot as rb
+from robot import ROBOT
 import random as rd
 import math
 from numpy import random
@@ -9,17 +9,18 @@ class INDIVIDUAL:
 
     def __init__(self, i):
         self.ID = i
-        self.genome = random.random((4,8)) * 2 - 1
+        self.genome = random.random((5,8)) * 2 - 1
         self.fitness = 0
 
-    def Start_Evaluation(self, eval_time=C.evalTime, play_blind=False):
+    def Start_Evaluation(self, env, eval_time=C.evalTime, play_blind=False):
         self.sim = pyrosim.Simulator(eval_time=eval_time, play_blind=play_blind)
-        self.robot = rb.ROBOT(self.sim, self.genome)
+        self.robot = ROBOT(self.sim, self.genome)
+        env.send_to(self.sim)
         self.sim.start()
 
     def Compute_Fitness(self):
         self.sim.wait_to_finish()
-        self.fitness = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
+        self.fitness += self.sim.get_sensor_data( sensor_id = self.robot.L4 )[-1]
         del(self.sim)
         return self.fitness
 

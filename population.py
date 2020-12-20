@@ -1,12 +1,13 @@
-from geneticAlgorithm import individual as I
+from individual import INDIVIDUAL
 from copy import deepcopy
 import random as rd
+import constants as C
 
 class POPULATION:
 
     def __init__(self, popSize=5, initialize=True):
         if initialize:
-            self.p = [I.INDIVIDUAL(i) for i in range(popSize)]
+            self.p = [INDIVIDUAL(i) for i in range(popSize)]
         else:
             self.p = []
         
@@ -16,17 +17,23 @@ class POPULATION:
             [p.print() for p in self.p]
         print()    
         
-    def evaluate(self, play_blind=False, best=False):
+    def evaluate(self, envs, play_blind=False, best=False):
         if best:
-            self.eval_best()
+            [self.eval_best(envs.envs[env]) for env in envs.envs]
         else:
-            [p.Start_Evaluation(play_blind=play_blind) for p in self.p]
-            [p.Compute_Fitness() for p in self.p]
+            for p in self.p:
+                p.fitness = 0
 
-    def eval_best(self):
-        best = max(self.p, key=lambda i: i.fitness)
-        best.Start_Evaluation()
-        best.Compute_Fitness()
+            for e in envs.envs:
+                [p.Start_Evaluation(envs.envs[e], play_blind=play_blind) for p in self.p]
+                [p.Compute_Fitness() for p in self.p]
+            
+            for p in self.p:
+                p.fitness /= len(envs.envs)
+
+    def eval_best(self, envs):
+        self.p[0].Start_Evaluation(envs)
+        self.p[0].Compute_Fitness()
         
     def mutate(self):
         [p.mutate() for p in self.p]
