@@ -1,3 +1,5 @@
+import numpy as np
+from numpy.core.numeric import cross
 from individual import INDIVIDUAL
 from copy import deepcopy
 import random as rd
@@ -52,11 +54,12 @@ class POPULATION:
     def collect_children_from(self, other):
         for i in other.p[1:]:
             winner = deepcopy(self.winner_of_tournament_selection(other))
-            self.p.append(winner if not winner in self.p else winner.mutate())
+            self.p.append(winner if not winner in self.p else winner.mutate().mutate().mutate())
 
     def winner_of_tournament_selection(self, other):
-        p1, p2 = 0, 0
-        while p1 == p2:
-            p1, p2 = [other.p[rd.randint(0, len(other.p) - 1)] for i in [1,2]]
+        # p1, p2 = 0, 0
+        # while p1 == p2:
+        #     p1, p2 = [other.p[rd.randint(0, len(other.p) - 1)] for i in [1,2]]
 
-        return max(p1, p2, key=lambda p: p.fitness)
+        return max(rd.sample(other.p, k=C.t_size), key=lambda p: p.fitness)
+
