@@ -1,16 +1,18 @@
-from copy import deepcopy
+from environments import ENVIRONMENTS
 from population import POPULATION
+import constants as C
 
-parents = POPULATION(10)
-parents.evaluate(True)
-parents.print('  0 ')
+envs = ENVIRONMENTS()
 
+parents = POPULATION(C.popSize)
+parents.evaluate(envs, True)
+parents.print('  0')
 
-for g in range(1,201):
-    children = POPULATION(initialize=False)
+for g in range(C.numGens):
+    children = POPULATION(C.popSize, initialize=False)
     children.fill_from(parents)
-    children.evaluate(True)
-    children.print('%3i' % g)
+    children.evaluate(envs, True)
+    children.print('%3i' % (g + 1))
     parents = children
 
-parents.evaluate(best=True)
+parents.evaluate(envs, best=True)

@@ -45,7 +45,7 @@ class ROBOT:
             first_body_id = self.O2, 
             second_body_id = self.O6, 
             n1 = 0 , n2 = 1 , n3 = 0,
-            x=1.5*C.L, y=0, z=C.L + C.R)
+            x=1.5*C.L, y=C.L*1.5, z=C.L + C.R)
 
         self.J4 = sim.send_hinge_joint( 
             first_body_id = self.O0, 
@@ -75,8 +75,6 @@ class ROBOT:
     def send_sensors(self,sim):
         #add position sensor
         self.P4 = sim.send_position_sensor( body_id = self.O0 )
-        #add light sensor
-        self.L4 = sim.send_light_sensor( body_id = self.O0 )
         #add touch sensor
         [setattr(self, f'T{i - 5}', sim.send_touch_sensor( body_id = getattr(self, f'O{i}'))) for i in range(5,9)]
         #delete temporary objects
@@ -84,13 +82,12 @@ class ROBOT:
     def send_neurons(self,sim):
         #add sensor neurons
         [setattr(self, f'SN{i}', sim.send_sensor_neuron( sensor_id = getattr(self, f'T{i}'))) for i in range(4)]
-        self.SN4 = sim.send_sensor_neuron(sensor_id=self.L4)
         #add motor neuron
         [setattr(self, f'MN{i + 4}', sim.send_motor_neuron( joint_id = getattr(self,f'J{i}'), tau=0.3)) for i in range(8)]
 
     def send_synapses(self,sim,wts):
         # add synapses
-        for i in range(5):
+        for i in range(4):
             for j in range(4, 12):
                 sim.send_synapse(
                     source_neuron_id = getattr(self, f'SN{i}'), 
