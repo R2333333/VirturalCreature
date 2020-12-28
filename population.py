@@ -1,5 +1,4 @@
 import numpy as np
-from numpy.core.numeric import cross
 from individual import INDIVIDUAL
 from copy import deepcopy
 import random as rd
@@ -19,26 +18,35 @@ class POPULATION:
             [p.print() for p in self.p]
         print()    
         
-    def evaluate(self, envs, play_blind=False, best=False):
+    def evaluate(self, envs=None, play_blind=False, best=False):
         if best:
-            [self.eval_best(envs.envs[env]) for env in envs.envs]
-        else:
+            if envs is not None:
+                map(self.eval_best, envs.envs)
+            else:
+                self.eval_best(envs)
+
+        elif envs is not None:
             for p in self.p:
                 p.fitness = 0
 
             for e in envs.envs:
                 [p.Start_Evaluation(envs.envs[e], play_blind=play_blind) for p in self.p]
-                [p.Compute_Fitness() for p in self.p]
+                map(lambda p: p.Compute_Fitness(), self.p)
             
             for p in self.p:
                 p.fitness /= len(envs.envs)
+
+        else:
+            [p.Start_Evaluation(play_blind=play_blind) for p in self.p]
+            [p.Compute_Fitness() for p in self.p]
 
     def eval_best(self, envs):
         self.p[0].Start_Evaluation(envs)
         self.p[0].Compute_Fitness()
         
     def mutate(self):
-        [p.mutate() for p in self.p]
+        for i in range(C.m_rate):
+            [p.mutate() for p in self.p]
 
     def replaceWith(self, other):
         for i in range(len(self.p)):
@@ -53,13 +61,25 @@ class POPULATION:
 
     def collect_children_from(self, other):
         for i in other.p[1:]:
-            winner = deepcopy(self.winner_of_tournament_selection(other))
-            self.p.append(winner if not winner in self.p else winner.mutate().mutate().mutate())
+            winner1 = deepcopy(self.winner_of_tournament_selection(other))
+            winner2 = deepcopy(self.winner_of_tournament_selection(other))
+            child1, child2 = self.crossover(winner1, winner2)
+            winner = max(winner1, winner2, child1, child2, key=lambda p: p.fitness)
+            self.p.append(winner if winner not in self.p else winner.mutate())
+        self.p[np.argmin(list(map(lambda p: p.fitness, self.p)))] = deepcopy(self.p[0]).mutate()
 
     def winner_of_tournament_selection(self, other):
-        # p1, p2 = 0, 0
-        # while p1 == p2:
-        #     p1, p2 = [other.p[rd.randint(0, len(other.p) - 1)] for i in [1,2]]
-
         return max(rd.sample(other.p, k=C.t_size), key=lambda p: p.fitness)
 
+    def crossover(self, parent1, parent2):
+        cross_amount = np.random.randint(parent1.genome.shape[0]*parent1.genome.shape[1]-1)
+        row = np.random.randint(len(parent1.genome), size=cross_amount)
+        col = np.random.randint(len(parent1.genome[0]), size=cross_amount)
+
+        child1 = deepcopy(parent1)
+        child2 = deepcopy(parent2)
+
+        child1.genome[row, col] = child2.genome[row, col]
+        child2.genome[row, col] = child1.genome[row, col]
+
+        return child1, child2
