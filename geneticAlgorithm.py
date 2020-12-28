@@ -1,8 +1,9 @@
 from environments import ENVIRONMENTS
 from population import POPULATION
 import constants as C
+import pickle
 
-envs = ENVIRONMENTS()
+envs = ENVIRONMENTS() if C.numEnvs > 0 else None
 
 parents = POPULATION(C.popSize)
 parents.evaluate(envs, True)
@@ -15,4 +16,6 @@ for g in range(C.numGens):
     children.print('%3i' % (g + 1))
     parents = children
 
+pickle.dump(parents.p[0], open("out3", 'wb'))
 parents.evaluate(envs, best=True)
+
