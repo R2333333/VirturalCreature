@@ -55,6 +55,8 @@ class POPULATION:
     def fill_from(self, other):
         self.copy_best_from(other)
         self.collect_children_from(other)
+        index = np.argmin(list(map(lambda p: p.fitness, self.p)))
+        self.p[index if index != 0 else 1] = deepcopy(self.p[0]).mutate()
 
     def copy_best_from(self, other):
         self.p.append(deepcopy(max(other.p, key=lambda i: i.fitness)))
@@ -66,7 +68,6 @@ class POPULATION:
             child1, child2 = self.crossover(winner1, winner2)
             winner = max(winner1, winner2, child1, child2, key=lambda p: p.fitness)
             self.p.append(winner if winner not in self.p else winner.mutate())
-        self.p[np.argmin(list(map(lambda p: p.fitness, self.p)))] = deepcopy(self.p[0]).mutate()
 
     def winner_of_tournament_selection(self, other):
         return max(rd.sample(other.p, k=C.t_size), key=lambda p: p.fitness)
