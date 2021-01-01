@@ -16,6 +16,6 @@ for g in range(C.numGens):
     children.print('%3i' % (g + 1))
     parents = children
 
-pickle.dump(parents.p[0], open("out3", 'wb'))
+# pickle.dump(parents.p[0], open("out3", 'wb'))
 parents.evaluate(envs, best=True)
 

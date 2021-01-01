@@ -21,7 +21,7 @@ class POPULATION:
     def evaluate(self, envs=None, play_blind=False, best=False):
         if best:
             if envs is not None:
-                map(self.eval_best, envs.envs)
+                [self.eval_best(envs.envs[i]) for i in envs.envs]
             else:
                 self.eval_best(envs)
 
@@ -31,7 +31,7 @@ class POPULATION:
 
             for e in envs.envs:
                 [p.Start_Evaluation(envs.envs[e], play_blind=play_blind) for p in self.p]
-                map(lambda p: p.Compute_Fitness(), self.p)
+                [p.Compute_Fitness() for p in self.p]
             
             for p in self.p:
                 p.fitness /= len(envs.envs)

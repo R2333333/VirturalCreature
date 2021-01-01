@@ -1,6 +1,6 @@
-from math import tau
 import constants as C
 from random import random
+from environments import ENVIRONMENTS
 class ROBOT:
 
     def __init__(self, sim, light=False, wts=[[-1 for i in range(8)] for j in range(4)]):
@@ -12,15 +12,15 @@ class ROBOT:
         self.send_synapses(sim, wts)
        
     def send_objects(self,sim):
-        self.O0 = sim.send_box(x=0, y=0, z=C.L + C.R, length=C.L, width=C.L, height=2*C.R, r=0.5, g=0.5, b=0.5)
-        self.O1 = sim.send_cylinder( x=0, y=C.L, z=C.L + C.R, length=C.L, radius=C.R, r1=0, r2=1, r3=0, r=1, g=0, b=0)
-        self.O2 = sim.send_cylinder( x=C.L, y=0, z=C.L + C.R, length=C.L, radius=C.R, r1=1, r2=0, r3=0, r=0, g=1, b=0)
-        self.O3 = sim.send_cylinder( x=0, y=-C.L, z=C.L + C.R, length=C.L, radius=C.R, r1=0, r2=1, r3=0, r=0, g=0, b=1)
-        self.O4 = sim.send_cylinder( x=-C.L, y=0, z=C.L + C.R, length=C.L, radius=C.R, r1=1, r2=0, r3=0, r=0.5, g=0, b=0.5)
-        self.O5 = sim.send_cylinder( x=0, y=1.5*C.L, z=C.L/2 + C.R, length=C.L, radius=C.R, r=1, g=0, b=0)
-        self.O6 = sim.send_cylinder( x=1.5*C.L, y=0, z=C.L/2 + C.R, length=C.L, radius=C.R, r=0, g=1, b=0)
-        self.O7 = sim.send_cylinder( x=0, y=-1.5*C.L, z=C.L/2 + C.R, length=C.L, radius=C.R, r=0, g=0, b=1)
-        self.O8 = sim.send_cylinder( x=-1.5*C.L, y=0, z=C.L/2 + C.R, length=C.L, radius=C.R, r=0.5, g=0, b=0.5)
+        self.O0 = sim.send_box(x=0, y=0, z=C.L + C.R, length=C.L, width=C.L, height=2*C.R, r=0.5, g=0.5, b=0.5, collision_group = 'robot')
+        self.O1 = sim.send_cylinder( x=0, y=C.L, z=C.L + C.R, length=C.L, radius=C.R, r1=0, r2=1, r3=0, r=1, g=0, b=0, collision_group = 'robot')
+        self.O2 = sim.send_cylinder( x=C.L, y=0, z=C.L + C.R, length=C.L, radius=C.R, r1=1, r2=0, r3=0, r=0, g=1, b=0, collision_group = 'robot')
+        self.O3 = sim.send_cylinder( x=0, y=-C.L, z=C.L + C.R, length=C.L, radius=C.R, r1=0, r2=1, r3=0, r=0, g=0, b=1, collision_group = 'robot')
+        self.O4 = sim.send_cylinder( x=-C.L, y=0, z=C.L + C.R, length=C.L, radius=C.R, r1=1, r2=0, r3=0, r=0.5, g=0, b=0.5, collision_group = 'robot')
+        self.O5 = sim.send_cylinder( x=0, y=1.5*C.L, z=C.L/2 + C.R, length=C.L, radius=C.R, r=1, g=0, b=0, collision_group = 'robot')
+        self.O6 = sim.send_cylinder( x=1.5*C.L, y=0, z=C.L/2 + C.R, length=C.L, radius=C.R, r=0, g=1, b=0, collision_group = 'robot')
+        self.O7 = sim.send_cylinder( x=0, y=-1.5*C.L, z=C.L/2 + C.R, length=C.L, radius=C.R, r=0, g=0, b=1, collision_group = 'robot')
+        self.O8 = sim.send_cylinder( x=-1.5*C.L, y=0, z=C.L/2 + C.R, length=C.L, radius=C.R, r=0.5, g=0, b=0.5, collision_group = 'robot')
 
     def send_joints(self,sim): 
         #add joints
