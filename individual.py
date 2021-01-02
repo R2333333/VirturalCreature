@@ -8,7 +8,7 @@ class INDIVIDUAL:
 
     def __init__(self, i):
         self.ID = i
-        self.genome = rd.random((5,8)) * 2 - 1
+        self.genome = rd.random((13,16)) * 2 - 1
         self.fitness = 0
 
     def Start_Evaluation(self, env=None, eval_time=C.evalTime, play_blind=False):
