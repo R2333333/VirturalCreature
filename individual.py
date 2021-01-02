@@ -21,10 +21,22 @@ class INDIVIDUAL:
 
         self.sim.start()
 
-    def Compute_Fitness(self):
+    def Compute_Fitness(self, env=None):
         self.sim.wait_to_finish()
 
-        self.fitness = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
+        if self.hasEnv:
+            if env.ID != 1:
+                y = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
+                self.fitness = y
+
+            if env.ID == 1:
+                y = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
+                y_box = self.sim.get_sensor_data( sensor_id = env.P5 , svi = 1 )[-1]
+
+                self.fitness = y + y_box
+
+        y = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
+        self.fitness = y
 
         del(self.sim)
         return self.fitness
