@@ -23,10 +23,8 @@ class INDIVIDUAL:
 
     def Compute_Fitness(self):
         self.sim.wait_to_finish()
-        if self.hasEnv:
-            self.fitness += self.sim.get_sensor_data( sensor_id = self.robot.L4 )[-1]
-        else:
-            self.fitness = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
+
+        self.fitness = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
 
         del(self.sim)
         return self.fitness
