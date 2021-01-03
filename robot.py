@@ -1,3 +1,4 @@
+import pyrosim
 import constants as C
 from random import random
 from environments import ENVIRONMENTS
@@ -97,31 +98,15 @@ class ROBOT:
         #add hidden neurons
         [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(8)]
 
-    def send_synapses(self,sim,wts):
-        # add synapses between input sensors and hidden layer
-        for i in range(5 if self.light else 4):
+    def send_synapses(self,sim: pyrosim.Simulator,wts):
+        # add synapses: sensors --> hidden layer --> motor
+        for i in range(4):
             for j in range(4, 12):
-                sim.send_synapse(
-                    source_neuron_id = getattr(self, f'SN{i}'),
-                    target_neuron_id = getattr(self, f'H{j}'),
-                    weight = wts[i][j-4])
-
-        # add synapses between hidden later and output motor neurons
+                sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j}'), wts[i][j-4][0])
+                sim.send_synapse(getattr(self, f'H{i + 4}'), getattr(self, f'MN{j}'), wts[i][j-4][1])
+    
+        # add synapses for bias into hidden and motor neuron/output layerlayer
         for i in range(4,12):
-            for j in range(4, 12):
-                sim.send_synapse(
-                    source_neuron_id = getattr(self, f'H{i}'),
-                    target_neuron_id = getattr(self, f'MN{j}'),
-                    weight = wts[i-4+5][j-4+8])
-
-        # add synapses for bias into hidden layer
-        for i in range(4,12):
-            sim.send_synapse(source_neuron_id = getattr(self, f'B{0}'),
-            target_neuron_id = getattr(self, f'H{i}'),
-            weight = 0.01)
+            sim.send_synapse(getattr(self, f'B{0}'), getattr(self, f'H{i}'), 0.01)
+            sim.send_synapse(getattr(self, f'B{1}'), getattr(self, f'MN{i}'), 0.01)
             
-        # add synapses for bias into motor neuron/output layer
-        for i in range(4, 12):
-            sim.send_synapse(source_neuron_id = getattr(self, f'B{1}'),
-            target_neuron_id = getattr(self, f'MN{j}'),
-            weight = 0.01)

@@ -56,7 +56,7 @@ class POPULATION:
         self.copy_best_from(other)
         self.collect_children_from(other)
         index = np.argmin(list(map(lambda p: p.fitness, self.p)))
-        self.p[index if index != 0 else 1] = deepcopy(self.p[0]).mutate()
+        self.p[index if index != 0 or len(self.p) == 1 else 1] = deepcopy(self.p[0]).mutate()
 
     def copy_best_from(self, other):
         self.p.append(deepcopy(max(other.p, key=lambda i: i.fitness)))
