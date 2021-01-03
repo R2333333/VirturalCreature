@@ -34,7 +34,7 @@ class INDIVIDUAL:
         return self.fitness
 
     def mutate(self, max_rate=C.m_rate):
-        m_rate = rd.randint(max_rate) + 1
+        m_rate = rd.randint(max_rate - 1) + 1
         row = rd.randint(len(self.genome), size=m_rate)
         col = rd.randint(len(self.genome[0]), size=m_rate)
         self.genome[row, col] = rd.normal(self.genome[row,col] , np.abs(self.genome[row, col]))
