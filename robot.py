@@ -102,11 +102,13 @@ class ROBOT:
         # add synapses: sensors --> hidden layer --> motor
         for i in range(4):
             for j in range(4, 12):
-                sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j}'), wts[i][j-4][0])
-                sim.send_synapse(getattr(self, f'H{i + 4}'), getattr(self, f'MN{j}'), wts[i][j-4][1])
-    
+                sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j}'), wts[0][i][j-4])
+
+        for i in range(4, 12):
+            for j in range(4, 12):
+                sim.send_synapse(getattr(self, f'H{i}'), getattr(self, f'MN{j}'), wts[1][i-4][j-4])
+
         # add synapses for bias into hidden and motor neuron/output layerlayer
         for i in range(4,12):
             sim.send_synapse(getattr(self, f'B{0}'), getattr(self, f'H{i}'), 0.01)
             sim.send_synapse(getattr(self, f'B{1}'), getattr(self, f'MN{i}'), 0.01)
-            

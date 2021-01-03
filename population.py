@@ -11,13 +11,13 @@ class POPULATION:
             self.p = [INDIVIDUAL(i) for i in range(popSize)]
         else:
             self.p = []
-        
+
     def print(self, precede=''):
-        if len(self.p) > 0: 
-            print(precede, end=' ')   
+        if len(self.p) > 0:
+            print(precede, end=' ')
             [p.print() for p in self.p]
-        print()    
-        
+        print()
+
     def evaluate(self, envs=None, play_blind=False, best=False):
         if best:
             if envs is not None:
@@ -32,7 +32,7 @@ class POPULATION:
             for e in envs.envs:
                 [p.Start_Evaluation(envs.envs[e], play_blind=play_blind) for p in self.p]
                 [p.Compute_Fitness() for p in self.p]
-            
+
             for p in self.p:
                 p.fitness /= len(envs.envs)
 
@@ -43,7 +43,7 @@ class POPULATION:
     def eval_best(self, envs):
         self.p[0].Start_Evaluation(envs)
         self.p[0].Compute_Fitness()
-        
+
     def mutate(self):
         for i in range(C.m_rate):
             [p.mutate() for p in self.p]
@@ -73,14 +73,15 @@ class POPULATION:
         return max(rd.sample(other.p, k=C.t_size), key=lambda p: p.fitness)
 
     def crossover(self, parent1, parent2):
-        cross_amount = np.random.randint(parent1.genome.shape[0]*parent1.genome.shape[1]-1)
-        row = np.random.randint(len(parent1.genome), size=cross_amount)
-        col = np.random.randint(len(parent1.genome[0]), size=cross_amount)
+        for g in range(len(parent1.genome)):
+            cross_amount = np.random.randint(parent1.genome[g].shape[0]*parent1.genome[g].shape[1]-1)
+            row = np.random.randint(parent1.genome[g].shape[0], size=cross_amount)
+            col = np.random.randint(parent1.genome[g].shape[1], size=cross_amount)
 
-        child1 = deepcopy(parent1)
-        child2 = deepcopy(parent2)
-
-        child1.genome[row, col] = child2.genome[row, col]
-        child2.genome[row, col] = child1.genome[row, col]
+            child1 = deepcopy(parent1)
+            child2 = deepcopy(parent2)
+            
+            child1.genome[g][row, col] = child2.genome[g][row, col]
+            child2.genome[g][row, col] = child1.genome[g][row, col]
 
         return child1, child2
