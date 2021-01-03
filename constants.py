@@ -1,9 +1,9 @@
 L = 0.1
 R = L/5
-evalTime = 2000
+evalTime = 1000
 popSize = 20
 numGens = 200
 numEnvs = 4
-t_size = 8
+t_size = 6
 m_rate = 3
 tau = 0.3
