@@ -82,7 +82,7 @@ class ENVIRONMENT:
     def send_to(self, sim: pyrosim.pyrosim.Simulator):
 
         if self.ID != 0:
-            object1 = sim.send_box(x=self.x1, y=self.y1, z=self.z1, length=self.l1, width=self.w1, height=self.h1, mass = 0.5, collision_group = 'env')
+                object1 = sim.send_box(x=self.x1, y=self.y1, z=self.z1, length=self.l1, width=self.w1, height=self.h1, mass = 0.5 if self.ID == 1 else 100, collision_group = 'env')
 
             if self.ID != 1:
                 object2 = sim.send_box(x=self.x2, y=self.y2, z=self.z2, length=self.l2, width=self.w2, height=self.h2, mass = 100, collision_group = 'env')

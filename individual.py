@@ -9,7 +9,7 @@ class INDIVIDUAL:
 
     def __init__(self, i):
         self.ID = i
-        self.genome = rd.random((4,8,2)) * 2 - 1
+        self.genome = [(rd.random((4,8)) * 2 - 1) , (rd.random((8,8)) * 2 - 1)]
         self.fitness = 0
 
     def Start_Evaluation(self, env=None, eval_time=C.evalTime, play_blind=False):
@@ -36,11 +36,14 @@ class INDIVIDUAL:
 
     def mutate(self, max_rate=C.m_rate):
         m_rate = rd.randint(max_rate - 1) + 1
-        row = rd.randint(len(self.genome), size=m_rate)
-        col = rd.randint(len(self.genome[0]), size=m_rate)
-        self.genome[row, col] = rd.normal(self.genome[row,col] , np.abs(self.genome[row, col]))
-        self.genome[self.genome > 1] = 1
-        self.genome[self.genome < -1] = -1
+
+        for g in self.genome:
+            row = rd.randint(g.shape[0], size=m_rate)
+            col = rd.randint(g.shape[1], size=m_rate)
+            g[row, col] = rd.normal(g[row,col] , np.abs(g[row, col]))
+            g[g > 1] = 1
+            g[g< -1] = -1
+        
         return self
 
     def print(self, precede='', to: FileIO = None):
