@@ -1,3 +1,4 @@
+from io import FileIO
 import numpy as np
 from individual import INDIVIDUAL
 from copy import deepcopy
@@ -12,10 +13,10 @@ class POPULATION:
         else:
             self.p = []
         
-    def print(self, precede=''):
+    def print(self, precede='', to: FileIO = None):
         if len(self.p) > 0: 
             print(precede, end=' ')   
-            [p.print() for p in self.p]
+            [p.print(to=to) for p in self.p]
         print()    
         
     def evaluate(self, envs=None, play_blind=False, best=False):

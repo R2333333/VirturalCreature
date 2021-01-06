@@ -96,3 +96,6 @@ class ENVIRONMENT:
             sim.assign_collision('env', 'robot')
 
             self.p_box = sim.send_position_sensor(body_id = object1)
+
+
+        #add box......
