@@ -1,3 +1,4 @@
+from io import FileIO
 import numpy as np
 from individual import INDIVIDUAL
 from copy import deepcopy
@@ -11,13 +12,13 @@ class POPULATION:
             self.p = [INDIVIDUAL(i) for i in range(popSize)]
         else:
             self.p = []
-
-    def print(self, precede=''):
-        if len(self.p) > 0:
-            print(precede, end=' ')
-            [p.print() for p in self.p]
-        print()
-
+        
+    def print(self, precede='', to: FileIO = None):
+        if len(self.p) > 0: 
+            print(precede, end=' ')   
+            [p.print(to=to) for p in self.p]
+        print()    
+        
     def evaluate(self, envs=None, play_blind=False, best=False):
         if best:
             if envs is not None:
@@ -73,13 +74,13 @@ class POPULATION:
         return max(rd.sample(other.p, k=C.t_size), key=lambda p: p.fitness)
 
     def crossover(self, parent1, parent2):
+        child1 = deepcopy(parent1)
+        child2 = deepcopy(parent2)
+
         for g in range(len(parent1.genome)):
-            cross_amount = np.random.randint(parent1.genome[g].shape[0]*parent1.genome[g].shape[1]-1)
+            cross_amount = np.random.randint(parent1.genome[g].shape[0]*parent1.genome[g].shape[1]/2-1)
             row = np.random.randint(parent1.genome[g].shape[0], size=cross_amount)
             col = np.random.randint(parent1.genome[g].shape[1], size=cross_amount)
-
-            child1 = deepcopy(parent1)
-            child2 = deepcopy(parent2)
             
             child1.genome[g][row, col] = child2.genome[g][row, col]
             child2.genome[g][row, col] = child1.genome[g][row, col]

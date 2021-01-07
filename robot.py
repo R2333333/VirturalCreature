@@ -4,7 +4,7 @@ from random import random
 from environments import ENVIRONMENTS
 class ROBOT:
 
-    def __init__(self, sim, light=False, wts=[[-1 for i in range(8)] for j in range(4)]):
+    def __init__(self, sim, light=False, wts=[]):
         self.light = light
         self.send_objects(sim)
         self.send_joints(sim)
@@ -96,15 +96,16 @@ class ROBOT:
         [setattr(self, f'B{i}', sim.send_bias_neuron()) for i in range(2)]
 
         #add hidden neurons
-        [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(8)]
+        [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(9 if self.light else 8)]
 
     def send_synapses(self,sim: pyrosim.Simulator,wts):
         # add synapses: sensors --> hidden layer --> motor
-        for i in range(4):
-            for j in range(4, 12):
+        neuron_num = 5 if self.light else 4
+        for i in range(neuron_num):
+            for j in range(4, 11):
                 sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j}'), wts[0][i][j-4])
 
-        for i in range(4, 12):
+        for i in range(4, 11):
             for j in range(4, 12):
                 sim.send_synapse(getattr(self, f'H{i}'), getattr(self, f'MN{j}'), wts[1][i-4][j-4])
 
