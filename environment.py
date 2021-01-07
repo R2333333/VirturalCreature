@@ -80,22 +80,21 @@ class ENVIRONMENT:
         self.z4 = 1.2 * C.L/2
 
     def send_to(self, sim: pyrosim.pyrosim.Simulator):
-
+        objects = {}
         if self.ID != 0:
-                object1 = sim.send_box(x=self.x1, y=self.y1, z=self.z1, length=self.l1, width=self.w1, height=self.h1, mass = 0.5 if self.ID == 1 else 100, collision_group = 'env')
-
+            objects[0] = sim.send_box(x=self.x1, y=self.y1, z=self.z1, length=self.l1, width=self.w1, height=self.h1, mass = 0.5 if self.ID == 1 else 100, collision_group = 'env')
+            
             if self.ID != 1:
-                object2 = sim.send_box(x=self.x2, y=self.y2, z=self.z2, length=self.l2, width=self.w2, height=self.h2, mass = 100, collision_group = 'env')
+                objects[1] = sim.send_box(x=self.x2, y=self.y2, z=self.z2, length=self.l2, width=self.w2, height=self.h2, mass = 100, collision_group = 'env')
+                objects[2] = sim.send_box(x=self.x3, y=self.y3, z=self.z3, length=self.l3, width=self.w3, height=self.h3, mass = 100, collision_group = 'env')
+                objects[3] = sim.send_box(x=self.x4, y=self.y4, z=self.z4, length=self.l4, width=self.w4, height=self.h4, mass = 100, collision_group = 'env')
 
-                object3 = sim.send_box(x=self.x3, y=self.y3, z=self.z3, length=self.l3, width=self.w3, height=self.h3, mass = 100, collision_group = 'env')
-
-                object4 = sim.send_box(x=self.x4, y=self.y4, z=self.z4, length=self.l4, width=self.w4, height=self.h4, mass = 100, collision_group = 'env')
-
+                [sim.send_light_source(objects[i]) for i in objects]
 
             sim.assign_collision('robot', 'env')
             sim.assign_collision('env', 'robot')
 
-            self.p_box = sim.send_position_sensor(body_id = object1)
+            self.p_box = sim.send_position_sensor(body_id = objects[1])
 
 
-        #add box......
+        # add box......
