@@ -96,20 +96,22 @@ class ROBOT:
         [setattr(self, f'B{i}', sim.send_bias_neuron()) for i in range(2)]
 
         #add hidden neurons
-        [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(9 if self.light else 8)]
+        [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(7 if self.light else 6)]
 
     def send_synapses(self,sim: pyrosim.Simulator,wts):
         # add synapses: sensors --> hidden layer --> motor
         neuron_num = 5 if self.light else 4
         for i in range(neuron_num):
-            for j in range(4, 11):
-                sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j}'), wts[0][i][j-4])
+            for j in range(neuron_num + 2):
+                sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j+4}'), wts[0][i,j])
 
-        for i in range(4, 11):
+        for i in range(neuron_num + 2):
             for j in range(4, 12):
-                sim.send_synapse(getattr(self, f'H{i}'), getattr(self, f'MN{j}'), wts[1][i-4][j-4])
+                sim.send_synapse(getattr(self, f'H{i+4}'), getattr(self, f'MN{j}'), wts[1][i,j-4])
 
         # add synapses for bias into hidden and motor neuron/output layerlayer
+        for i in range(neuron_num + 2):
+            sim.send_synapse(getattr(self, f'B{0}'), getattr(self, f'H{i+4}'), 1 / (neuron_num + 2))
+
         for i in range(4,12):
-            sim.send_synapse(getattr(self, f'B{0}'), getattr(self, f'H{i}'), 0.01)
-            sim.send_synapse(getattr(self, f'B{1}'), getattr(self, f'MN{i}'), 0.01)
+            sim.send_synapse(getattr(self, f'B{1}'), getattr(self, f'MN{i}'), 1 / 8)

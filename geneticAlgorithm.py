@@ -35,7 +35,7 @@ def test_loop(pop_range: list, t_fraction: float, m_fraction: float):
             for t_size in range(1, int(t_fraction * pop_size) + 1, int(pop_size/10)):
                 C.set_cons('t_size', t_size)
                 
-                for m_rate in range(1, int(m_fraction * pop_size) + 1, int(pop_size/10)):
+                for m_rate in range(1, int(m_fraction * 72) + 1, int(72/10)):
 
                     C.set_cons('m_rate', m_rate)
                     output.write(f'\n{pop_size},{t_size},{m_rate}')

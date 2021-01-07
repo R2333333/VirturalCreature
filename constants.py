@@ -1,7 +1,7 @@
 L = 0.1
 R = L/5
-evalTime = 1500
-popSize = 25
+evalTime = 2000
+popSize = 20
 numGens = 200
 numEnvs = 4
 t_size = 4
