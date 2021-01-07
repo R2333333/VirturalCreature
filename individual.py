@@ -1,7 +1,5 @@
 from io import FileIO
 from matplotlib import pyplot as plt
-from numpy.core.defchararray import equal
-# from networkx.algorithms.bipartite.basic import color
 import pyrosim
 from robot import ROBOT
 import numpy as np
@@ -38,7 +36,6 @@ class INDIVIDUAL:
     def Compute_Fitness(self):
         self.sim.wait_to_finish()
         pos = self.sim.get_sensor_data( sensor_id = self.robot.P4 , svi = 1 )[-1]
-        pos *= 1.5 if self.hasLight else 0.5
         self.fitness += pos if not self.carry_box else (pos + self.sim.get_sensor_data(self.p_box, svi=1)[-1]) / 2
 
         del(self.sim)
@@ -46,13 +43,13 @@ class INDIVIDUAL:
 
     def mutate(self, max_rate=C.m_rate):
         m_rate = rd.randint(max_rate - 1) + 1
-        gene_shape = [g.shape for g in self.genome] if self.hasLight \
-            else     [g.shape - i for g, i in zip(self.genome, [1, [1,0]])]
+        # gene_shape = [g.shape for g in self.genome] if self.hasLight \
+        #     else     [g.shape - i for g, i in zip(self.genome, [1, [1,0]])]
 
-        for g in [0,1]:
-            curr_g = self.genome[g]
-            row = rd.randint(gene_shape[g][0], size=m_rate)
-            col = rd.randint(gene_shape[g][1], size=m_rate)
+        for curr_g in self.genome:
+            # curr_g = self.genome[g]
+            row = rd.randint(curr_g.shape[0], size=m_rate)
+            col = rd.randint(curr_g.shape[1], size=m_rate)
             curr_g[row, col] = rd.normal(curr_g[row,col] , np.abs(curr_g[row, col]))
         
             curr_g[curr_g > 1] = 1
