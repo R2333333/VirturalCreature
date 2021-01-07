@@ -43,4 +43,5 @@ def test_loop(pop_range: list, t_fraction: float, m_fraction: float):
 
 
 envs = ENVIRONMENTS() if C.numEnvs > 0 else None
-test_loop([10, 25, 5], 0.7, 0.5)
+# test_loop([10, 25, 5], 0.7, 0.5)
+genetic_algorithm()

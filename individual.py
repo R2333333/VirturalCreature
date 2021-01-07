@@ -12,7 +12,7 @@ class INDIVIDUAL:
 
     def __init__(self, i):
         self.ID = i
-        self.genome = [(rd.random((4,7)) * 2 - 1) , (rd.random((7,8)) * 2 - 1)]
+        self.genome = [(rd.random((5,7)) * 2 - 1) , (rd.random((7,8)) * 2 - 1)]
         self.fitness = 0
 
     def Start_Evaluation(self, env=None, eval_time=C.evalTime, play_blind=False):
@@ -29,6 +29,8 @@ class INDIVIDUAL:
 
         self.robot = ROBOT(self.sim, hasLight, self.genome)
 
+        self.sim.assign_collision('robot', 'env')
+        self.sim.assign_collision('env', 'robot')
         self.sim.start()
 
     def Compute_Fitness(self):
@@ -79,4 +81,4 @@ class INDIVIDUAL:
         nx.draw(graph, with_labels=True, pos=pos, edge_color=colors)
         plt.show()
 
-INDIVIDUAL(0).draw_network()
+# INDIVIDUAL(0).draw_network()

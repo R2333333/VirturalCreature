@@ -76,9 +76,9 @@ class POPULATION:
     def crossover(self, parent1, parent2):
         child1 = deepcopy(parent1)
         child2 = deepcopy(parent2)
-        
+
         for g in range(len(parent1.genome)):
-            cross_amount = np.random.randint(parent1.genome[g].shape[0]*parent1.genome[g].shape[1]-1)
+            cross_amount = np.random.randint(parent1.genome[g].shape[0]*parent1.genome[g].shape[1]/2-1)
             row = np.random.randint(parent1.genome[g].shape[0], size=cross_amount)
             col = np.random.randint(parent1.genome[g].shape[1], size=cross_amount)
             

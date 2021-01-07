@@ -6,6 +6,7 @@ class ENVIRONMENT:
         self.ID = id
         self.l, self.w, self.h = [C.L] * 3
         self.carry_box = False
+        self.hasLight = False
         getattr(self, f'{pos[id]}')()
 
     #an empty environment
@@ -50,6 +51,8 @@ class ENVIRONMENT:
         self.y4 = 25*C.L
         self.z4 = 0.9*C.L/2
 
+        self.hasLight = True
+
     def up_stairs(self):
         self.l1 = 5 * C.L
         self.w1 = 300 * C.L
@@ -79,6 +82,8 @@ class ENVIRONMENT:
         self.y4 = 25 * C.L
         self.z4 = 1.2 * C.L/2
 
+        self.hasLight = True
+
     def send_to(self, sim: pyrosim.pyrosim.Simulator):
         objects = {}
         if self.ID != 0:
@@ -91,10 +96,4 @@ class ENVIRONMENT:
 
                 [sim.send_light_source(objects[i]) for i in objects]
 
-            sim.assign_collision('robot', 'env')
-            sim.assign_collision('env', 'robot')
-
-            self.p_box = sim.send_position_sensor(body_id = objects[1])
-
-
-        # add box......
+            self.p_box = sim.send_position_sensor(body_id = objects[0])
