@@ -87,13 +87,13 @@ class ENVIRONMENT:
     def send_to(self, sim: pyrosim.pyrosim.Simulator):
         objects = {}
         if self.ID != 0:
-            objects[0] = sim.send_box(x=self.x1, y=self.y1, z=self.z1, length=self.l1, width=self.w1, height=self.h1, mass = 0.5 if self.ID == 1 else 100, collision_group = 'env')
+            objects[0] = sim.send_box(x=self.x1, y=self.y1 - (0 if self.ID == 1 else 5 * C.L), z=self.z1, length=self.l1, width=self.w1, height=self.h1, mass = 0.5 if self.ID == 1 else 100, collision_group = 'env')
             
             if self.ID != 1:
-                objects[1] = sim.send_box(x=self.x2, y=self.y2, z=self.z2, length=self.l2, width=self.w2, height=self.h2, collision_group = 'env')
-                objects[2] = sim.send_box(x=self.x3, y=self.y3, z=self.z3, length=self.l3, width=self.w3, height=self.h3, collision_group = 'env')
-                objects[3] = sim.send_box(x=self.x4, y=self.y4, z=self.z4, length=self.l4, width=self.w4, height=self.h4, collision_group = 'env')
-                [sim.send_fixed_joint(objects[i], -1) for i in [1, 2, 3]]
+                objects[1] = sim.send_box(x=self.x2, y=self.y2 - 5 * C.L, z=self.z2, length=self.l2, width=self.w2, height=self.h2, mass = 100, collision_group = 'env')
+                objects[2] = sim.send_box(x=self.x3, y=self.y3 - 5 * C.L, z=self.z3, length=self.l3, width=self.w3, height=self.h3, mass = 100, collision_group = 'env')
+                objects[3] = sim.send_box(x=self.x4, y=self.y4 - 5 * C.L, z=self.z4, length=self.l4, width=self.w4, height=self.h4, mass = 100, collision_group = 'env')
+                [sim.send_fixed_joint(objects[i], -1) for i in [objects]]
                 [sim.send_light_source(objects[i]) for i in objects]
 
             self.p_box = sim.send_position_sensor(body_id = objects[0])

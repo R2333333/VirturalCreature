@@ -78,8 +78,8 @@ class ROBOT:
         #add position sensor
         self.P4 = sim.send_position_sensor( body_id = self.O0 )
         #add light sensor
-        # if self.light:
-        self.L4 = sim.send_light_sensor( body_id = self.O0 )
+        if self.light:
+            self.L4 = sim.send_light_sensor( body_id = self.O0 )
         #add touch sensor
         [setattr(self, f'T{i - 5}', sim.send_touch_sensor( body_id = getattr(self, f'O{i}'))) for i in range(5,9)]
         #delete temporary objects
@@ -87,8 +87,8 @@ class ROBOT:
     def send_neurons(self,sim):
         #add sensor neurons
         [setattr(self, f'SN{i}', sim.send_sensor_neuron( sensor_id = getattr(self, f'T{i}'))) for i in range(4)]
-        # if self.light :
-        self.SN4 = sim.send_sensor_neuron(sensor_id=self.L4)
+        if self.light :
+            self.SN4 = sim.send_sensor_neuron(sensor_id=self.L4)
         #add motor neuron
         [setattr(self, f'MN{i + 4}', sim.send_motor_neuron( joint_id = getattr(self,f'J{i}'), tau=C.tau)) for i in range(8)]
 
@@ -96,11 +96,11 @@ class ROBOT:
         [setattr(self, f'B{i}', sim.send_bias_neuron()) for i in range(2)]
 
         #add hidden neurons
-        [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(7)]
+        [setattr(self, f'H{i + 4}', sim.send_hidden_neuron()) for i in range(7 if self.light else 6)]
 
     def send_synapses(self,sim: pyrosim.Simulator,wts):
         # add synapses: sensors --> hidden layer --> motor
-        neuron_num = 5 #if self.light else 4
+        neuron_num = 5 if self.light else 4
         for i in range(neuron_num):
             for j in range(neuron_num + 2):
                 sim.send_synapse(getattr(self, f'SN{i}'), getattr(self, f'H{j+4}'), wts[0][i,j])
