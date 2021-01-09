@@ -60,7 +60,7 @@ class INDIVIDUAL:
 
     def print(self, precede='', to: FileIO = None):
         if to is not None:
-            to.write('%8.5f' % self.fitness)
+            to.write(',%8.5f' % self.fitness)
         print(f'{precede}[%i %8.5f]' % (self.ID, self.fitness), end=' ')
 
     def  __eq__(self, other):

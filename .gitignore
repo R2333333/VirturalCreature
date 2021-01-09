@@ -5,3 +5,4 @@ robot.p
 *.bak
 *.pyc
 .DS_Store
+playback*/

@@ -27,7 +27,7 @@ def genetic_algorithm(pop_size=C.popSize, playback=None, play_result=True, store
     
 
 def test_loop(pop_range: list, t_fraction: float, m_fraction: float):
-    with open('data_out.csv', 'w') as output: 
+    with open('data_out3.csv', 'w') as output: 
         output.write('pop_size,t_size,m_rate,score')
 
         for pop_size in range(*pop_range):
@@ -39,9 +39,9 @@ def test_loop(pop_range: list, t_fraction: float, m_fraction: float):
 
                     C.set_cons('m_rate', m_rate)
                     output.write(f'\n{pop_size},{t_size},{m_rate}')
-                    genetic_algorithm(pop_size, f'p{pop_size}t{t_size}m{m_rate}', False, output)
+                    genetic_algorithm(pop_size, f'playbacks2/p{pop_size}t{t_size}m{m_rate}', False, output)
 
 
 envs = ENVIRONMENTS() if C.numEnvs > 0 else None
-# test_loop([10, 25, 5], 0.7, 0.5)
-genetic_algorithm()
+test_loop([25, 26, 5], 0.7, 0.5)
+# genetic_algorithm()
