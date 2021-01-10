@@ -1,7 +1,9 @@
 __pycache__/
-playback.py
 robot.p
 *.bmp
 *.bak
 *.pyc
 .DS_Store
+playback*/
+nohup.out
+drawing/
