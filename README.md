@@ -3,6 +3,8 @@ Coursework 2 project for ECMM409
 
 A Robot that fits mutiple environments for different objectives
 
+[Video of Output](https://www.youtube.com/watch?v=dQJzJTQ_SEY)
+
 ## Dependencies
 
 [Pyrosim](https://ccappelle.github.io/pyrosim/) 0.1.1
